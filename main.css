@@ -1,13 +1,16 @@
 body{
 font-family:calibri;
-background-image: url("ripper.jpg");
+background-image: url("images/ripper.jpg");
 color: #000000;
-opacity: 0.7;
+opacity: 0.8;
+width:1086px;
+  margin:20px;
+  z-index:-4;
 
 }
 
 label{
-  width:14ch;
+  width:17ch;
   display:block;
   float:left;
   text-align:left;
@@ -18,51 +21,50 @@ label{
 background: #6C7F93;
 padding-top: 5px;
 padding-bottom: 10px;
+
 }
 
 /*main*/
 #mainscreen{
-  height:50%;
+  height:500px;
   background: #d2e5f9;
 }
 
 #spells{
-	/*width:10%;*/
 	float:left;
-	height:100%;
+	height:500px;
 	background: #8699AD;
-	padding-right: 3px;
+	padding-right: 6px;
+	padding-left: 3px;
+}
+
+.spell{
+display:none;
 }
 
 #youtotal{
 position:relative;
 background: #9FB2C6;
-  width:35%;
-  height:100%;
+  width:400px;
+	height:500px;
   float:left;
 }
 
 #you{
 position:relative;
 background: #9FB2C6;
-width:50%;
-height:100%;
+width:100%;
 float:left;
-
+padding:10px;
 }
 
-#you2{
-position:relative;
-background: #9FB2C6;
-width:50%;
-height:100%;
-float:left;
-
+.youdetail{
+padding-bottom:10px;
 }
 
 #statusbook{
 position:relative;
-width: 8%;
+width: 120px;
 height:100%;
 float:left;
 background: #B9CCE0;
@@ -71,11 +73,20 @@ background: #B9CCE0;
 .panel{
  display:none;
  position:relative;
- float:right;
- border:1px solid black;
- height:100%;
- width:45%;
+ float:left;
+
+ width:500px;
 }
+#container3{
+ position:relative;
+  float:right;
+ height:100%;
+ width:16px;
+ z-index:3;
+ border:3px ridge #ffd700;
+ box-sizing:border-box;
+}
+
 
 #enemytop{
 position:relative;
@@ -87,40 +98,43 @@ background-color:#C2D3E6;
 }
 .enemybig{
 font-weight: bold;
-width:70%;
+width:100%;
 font-size: 150%;
 font-family:Monotype Corsiva;
 font-style: italic;
 padding-left:40px;
 padding-right:40px;
 }
+#enemyname{width:60%;}
 #setting{
 width:30%;
 float:right;
 text-transform: capitalize;
 text-align:right;
 background-color:#C2D3E6;
-
-
 }
 
 #enemy{
  padding-top:50px;
+ height:450px;
 }
 
 #dungeondetails{
 position:absolute;
-background: #6C7F93;
+background: #C2D3E6;
 width:100%;
 text-align: center; 
-bottom: 0;
-color: #fff;
+bottom: 0px;
+color: #000;
 }
 
 #enemysect{
 position:absolute;
 width:100%;
-bottom: 50;
+bottom: 48px;
+border:5px outset #cc44cc;
+box-sizing:border-box;
+
 }
 
 #logbook{
@@ -155,7 +169,7 @@ height:1.5em;
 	z-index: 1;
 
 	display:inline-block;
-	margin-top: -22px;
+	margin-top: -18px;
 	background: none;
 	width:50%;
 	float:left;
@@ -163,50 +177,65 @@ height:1.5em;
 }
 #maxhealth,#maxmana,#enemymaxhealth{
 	display:inline-block;
-	margin-top: -22px;
+	margin-top: -18px;
 	left:60px;
 	width:50%;
 	float:right;
 	text-align:left;
 }
 
+
 #container{
 width:100%;
-bottom: 25;
-border-top:1px solid black;
-border-bottom:1px solid black;
+bottom: 24;
+border:5px outset #CC4343;
 float:left;
 position:absolute;
+box-sizing:border-box;
 }
 
 #container2{
 width:100%;
 bottom: 0;
-border-top:1px solid black;
-border-bottom:1px solid black;
+border:5px outset #4444CC;
 float:left;
 position:absolute;
+box-sizing:border-box;
 
 }
 
 /*buttons*/
 input {
 background: #394C60;
-width: 100px;
 border: ridge #53667A;
 margin-left: 3px;
-margin-top: 3px;
+margin-top: 5px;
 color: #fff;
 font-size: 90%;
 }
 
+.normal{
+width: 100px;
+}
+
 input:hover{
-color: #ccc;
+color: #fff;
+background: #4C6580;
 }
 
 input:active{
 border: ridge #53667A;
 background: #203347;
+}
+
+.tab{
+background: #fff;
+color: #000;
+width:70px;
+}
+
+.skillbtn{
+width:13ch;
 }
 
 .movingdun{
@@ -227,16 +256,22 @@ color:#000;
 }
 
 .rubies{color: #f99;text-transform: capitalize;}
-.sapphires{color: #99f;text-transform: capitalize;}
+.sapphires{color: #ccf;text-transform: capitalize;}
 .emeralds{color: #9f9;text-transform: capitalize;}
 .diamonds{color:#ccc;text-transform: capitalize;}
 .gold{color:#FFFF99;text-transform: capitalize;}
 .uncommon{color: #ccf;}
 .rare{color:#E6E68A;}
 
-.skills{
-width:50%;
+.ui-tooltip, .arrow:after {
+  background: #004D00;
+  border: 2px solid white;
 }
-.skillbtn{
 
-}
+.ui-tooltip {
+opacity:0.9;
+color: white;
+font: bold 10px "Helvetica Neue", Sans-Serif;
+box-shadow: 0 0 7px black;
+width:120px;
+  }

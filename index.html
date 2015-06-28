@@ -1,52 +1,81 @@
 <head>
+<link rel="stylesheet" type="text/css" href="jquery/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="main.css" />
 <title>Beyond The Veil</title>
+<script>
+/*
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-64107180-1', 'auto');
+  ga('send', 'pageview');
+*/
+</script>
 </head>
 
 <body onload="loadGame()">
 
 <div id="whole">
 <div id="states" class="section">
-<input type="button" value="Fight!" onClick="changestate(0)" id="changestate" />
-<input type="button" value="Craft" onClick="changestate(3)" id="changestate" />
-<input type="button" value="Shop" onClick="changestate(4)" id="changestate" />
-<input type="button" value="Skills" onClick="changestate(5)" id="changestate" />
-<input type="button" value="Stats" onClick="changestate(6)" id="changestate" />
+<input type="button" value="Area" onClick="changestate(0)" id="changestate" class="tab" data-tooltip="I’m the tooltip text." />
+<input type="button" value="Craft" onClick="changestate(3)" id="changestate" class="tab" />
+<input type="button" value="Shop" onClick="changestate(4)" id="changestate" class="tab" />
+<input type="button" value="Skills" onClick="changestate(5)" id="changestate" class="tab" />
+<input type="button" value="Stats" onClick="changestate(6)" id="changestate" class="tab" />
 <span id="version"></span>
 </div>
 
 <div id="mainscreen" class="section">
 
 <div id="spells">
-<input type="button" value="Spark" onClick="spark()" class="fightspell" id="sparkbtn" disabled /><br />
-<input type="button" value="Rage" onClick="generatestatus('rage',10)" id="ragebtn" /><br />
-<input type="button" value="Regen" onClick="generatestatus('regen',10)" id="regenbtn" />
+<div id="sparkspell" class="spell"><input type="image" value="Spark" src="images/lightning3.png" onClick="spark()" class="fightspell" id="sparkbtn" title="Spark, 20 mana: 20 damage per level plus any spell bonus."/></div>
+<div id="regenspell" class="spell"><input type="image" value="Regen" src="images/regen2.png" onClick="generatestatus(1,10)" id="regenbtn" title="Regeneration" /></div>
+<div id="freezespell" class="spell"><input type="image" value="Freeze" src="images/freeze2.png" onClick="freeze()" id="freezebtn" title="Freeze" disabled /></div>
+<div id="ragespell" class="spell"><input type="image" value="Rage" src="images/rage2.png" onClick="generatestatus('rage',10)" id="ragebtn" title="Rage" disabled /></div>
+<div id="itemspell" class="spell"><input type="image" value="Rain Items" src="images/itembuff2.png" onClick="generatestatus('itembuff',10)" id="itembuffbtn" title="Item Buff" disabled /></div>
+
 </div>
 <div id="youtotal">
 <div id="you">
-<label>Level:</label> <span id="playerlvl">1</span><br />
-<label>Exp Needed:</label> <span id="exp">0</span><br />
-<label>Skill Pts:</label> <span id="skillpts">0</span><br />
-<label>Attack:</label> <span id="attack">10</span><br />
-<label>Gold:</label> <span id="gold">0</span><br />
-<label>Rubies:</label> <span id="rubies">0</span><br />
-<label>Sapphires:</label> <span id="sapphires">0</span><br />
-<label>Emeralds:</label> <span id="emeralds">0</span><br />
-<label>Diamonds:</label> <span id="diamonds">0</span>
-</div>
-<div id="you2">
+<div style="width:20%;float:left;"><img src="images/coins.png"  title="gold"/> <span id="gold">0</span></div>
+<div style="width:20%;float:left;"><img src="images/ruby.png" title="rubies"/> <span id="rubies">0</span></div>
+<div style="width:20%;float:left;"><img src="images/sapphire.png" title="sapphires" /> <span id="sapphires">0</span></div>
+<div style="width:20%;float:left;"><img src="images/emerald.png" title="emeralds" /> <span id="emeralds">0</span></div>
+<div style="width:20%;float:left;"><img src="images/diamond.png"  title="diamonds"/> <span id="diamonds">0</span></div>
+<br />
+<p>
+<div class="youdetail"><label>Level:</label> <span id="playerlvl">1</span></div>
+<div class="youdetail"><label>Exp Needed:</label> <span id="exp">0</span></div>
+<div class="youdetail"><label>Skill Pts:</label> <span id="skillpts">0</span></div>
+<div class="youdetail"><label>Attack:</label> <span id="attack">10</span></div>
 <span id="weapon"></span>
+</p>
+<p>
+<labe>Rage attune:</label> <select id="attune" onchange="rageattune()">
+  <option value="0" selected="selected"> </option>
+  <option value="1">Gold</option>
+  <option value="2">Exp</option>
+  <option value="3">Rarity</option>
+</select>
+</p>
 </div>
+<!--
+<div id="you2">
+
+</div> -->
+
 
 <div id="container" style="height:25px;" >
   <div id="healthbar" style="background-color:#ff5555; height:100%;"></div>
-<span id="health" class="midnum">100/</span>
-<span id="maxhealth">100</span>
+<span id="health" class="midnum">1000/</span>
+<span id="maxhealth">1000</span>
 </div>
-<div id="container2" style="height:25px;">
+<div id="container2" style="height:25px;" title="By default, mana regenerates at 1% per second">
   <div id="manabar" style="background-color:#5555ff; height:100%;"></div>
-<span id="mana" class="midnum">100/</span>
-<span id="maxmana">100</span>
+<span id="mana" class="midnum">1000/</span>
+<span id="maxmana">1000</span>
 </div>
 </div>
 
@@ -54,14 +83,15 @@
 </div>
 
 <div id="mappanel" style="display:block" class="panel">
-<p>Welcome...to the map</p>
-<input type="button" value="Grasslands" onClick="changemap('grassland')" class="maptype" style="background: #538C55;"/> <span>nice.</span><br />
-<input type="button" value="Forest" onClick="changemap('forest')" class="maptype" style="background: #39603a;" /><br />
-<input type="button" value="Mountain" onClick="changemap('mountain')" class="maptype" style="background:#8C8C8C" /><br />
-<input type="button" value="Desert" onClick="changemap('desert')" class="maptype" style="background:#8C8353" /><br />
-<input type="button" value="Volcano" onClick="changemap('volcano')" class="maptype" style="background:#8C5353" /><br />
-<input type="button" value="Ocean" onClick="changemap('ocean')" class="maptype" style="background:#53668C" disabled /><span>Disabled for now.</span><br />
-
+<p style="padding-left:5px">Welcome to the map. You can use the gold you earn battling monsters to buy maps of other regions in the shop. Each region is more likely to have certain items and certain enemies.</p>
+<p style="padding-left:5px">As a general guide, rubies are likely to get health bonuses, sapphires mana, emeralds rewards and diamonds damage.</p>
+<p style="padding-left:5px">To move on to the next level of each area you will need to defeat several monsters.</p>
+<div><input type="image" value="Grasslands" src="images/grass.png"  onClick="changemap('grassland')" class="maptype" style="background: #538C55;"/> <span style="vertical-align:15px">Grassland: No special loot, no special enemies.</span></div>
+<div id="forest" style="display:none"><input type="image" value="Forest" src="images/forest.png"  onClick="changemap('forest')" class="maptype" style="background: #39603a;" /> <span style="vertical-align:15px">Forest: Filled with creatures and emeralds beneath the leaves.</span></div>
+<div id="mountain" style="display:none"><input type="image" value="Mountain" src="images/mountain.png" onClick="changemap('mountain')" class="maptype" style="background:#8C8C8C" /> <span style="vertical-align:15px">Mountain: Birds circle above, but diamonds are buried below.</span></div>
+<div id="desert" style="display:none"><input type="image" value="Desert" src="images/desert.png" onClick="changemap('desert')" class="maptype" style="background:#8C8353" /> <span style="vertical-align:15px">Desert: Reptiles hoard mountains of gold here.</span></div>
+<div id="volcano" style="display:none"><input type="image" value="Volcano" src="images/volcano.png" onClick="changemap('volcano')" class="maptype" style="background:#8C5353" /> <span style="vertical-align:15px">Volcano: Rubies form the hearts of demons.</span></div>
+<div id="ocean" style="display:none"><input type="image" value="Ocean" src="images/ocean.png" onClick="changemap('ocean')" class="maptype" style="background:#53668C" disabled /> <span style="vertical-align:15px">Ocean: They don't call it the sapphire ocean for nothing.</span></div>
 </div>
 
 <div id="enemypanel" class="panel">
@@ -73,7 +103,7 @@
 		<span id="enemytype"></span><br />
 		<span id="enemyspecial"></span><br />
 	</div>
-	<div id="enemysect" style="width:100%; height:25px; border:1px solid black;" >
+	<div id="enemysect" style="width:100%; height:25px;" >
 		<div id="enemybar" style="width:100%;background-color:#ff55ff; height:100%;"></div>
 		<span id="enemyhealth" class="midnum"></span>
 		<span id="enemymaxhealth"></span>
@@ -104,40 +134,55 @@
 
 <div id="shoppanel" class="panel">
 <h1>Buying</h1>
+<p style="margin-left:4px">Hover over each button for details.</p>
 <div id="shop"></div>
 </div>
 
 <div id="skillpanel" class="panel">
-<p>Each of the skills below cost 1 skill point</p>
+<p>Each of the skills below cost 1 skill point.</p>
 <div id="available_skills">
-<input type="button" id="skill1" value="Acrobatics (0)" onClick="buyskill(1)" class="skillbtn" /><span class="skills"> Leap over corpses with the speed and finesse of a gymnast.</span><br />
-<input type="button" id="skill2" value="Haggling (0)" onClick="buyskill(2)" class="skillbtn" /><span class="skills"> Ensure no merchant gets the better of you.</span><br />
-<input type="button" id="skill3" value="Survival (0)" onClick="buyskill(3)" class="skillbtn" /><span class="skills"> Do you know how to make bandages out of hearts and eyeballs?</span><br />
-<input type="button" id="skill4" value="Autopsy (0)" onClick="buyskill(4)" class="skillbtn" /><span class="skills"> Some gems are hidden in the guts you know...</span><br />
-<input type="button" id="skill5" value="Smithing (0)" onClick="buyskill(5)" class="skillbtn" /><span class="skills"> Hammer your crafts in just the right way.</span><br />
-<input type="button" id="skill6" value="Magic (0)" onClick="buyskill(6)" class="skillbtn" /><span class="skills"> Wave your hands in the air like you just don't care.</span><br />
-<input type="button" id="skill7" value="Boozing (0)" onClick="buyskill(7)" class="skillbtn" /><span class="skills"> Learn to handle your drink.</span><br />
+<input type="button" id="skill1" value="Acrobatics (0)" onClick="buyskill(1)" class="skillbtn"/><span class="skills">-1 second timer between fights per level. Max level: 5.</span><br />
+<input type="button" id="skill2" value="Haggling (0)" onClick="buyskill(2)" class="skillbtn" /><span class="skills" id="skilltext2">Cheaper items (NOT IMPLEMENTED)</span><br />
+<input type="button" id="skill3" value="Survival (0)" onClick="buyskill(3)" class="skillbtn" /><span class="skills">+2% of max HP healed per turn. Max level: 10</span><br />
+<input type="button" id="skill4" value="Autopsy (0)" onClick="buyskill(4)" class="skillbtn" /><span class="skills"> +5% drop chance. Max: 5.</span><br />
+<input type="button" id="skill5" value="Smithing (0)" onClick="buyskill(5)" class="skillbtn" /><span class="skills">Bonus to crafting (NOT IMPLEMENTED)</span><br />
+<input type="button" id="skill6" value="Magic (0)" onClick="buyskill(6)" class="skillbtn" /><span class="skills">+50% Bonus to spell effect (semi implemented)</span><br />
+<input type="button" id="skill7" value="Boozing (0)" onClick="buyskill(7)" class="skillbtn"/><span class="skills"> Learn to handle your drink (NOT IMPLEMENTED)</span><br />
 <input type="button" id="skill8" value="Mapping (0)" onClick="buyskill(8)" class="skillbtn" /><span class="skills"> You find your way around areas easier.</span><br />
-<input type="button" id="skill9" value="Backstab (0)" onClick="buyskill(9)" class="skillbtn" /><span class="skills"> Dart behind and enemy, then BAM. Wicked damage.</span><br />
-<input type="button" id="skill10" value="Reading (0)" onClick="buyskill(9)" class="skillbtn" /><span class="skills"> Pick up a book between fights and grow wise.</span><br /></div>
+<input type="button" id="skill9" value="Backstab (0)" onClick="buyskill(9)" class="skillbtn" /><span class="skills"> +5% crit chance per level. Max: 5.</span><br />
+<input type="button" id="skill10" value="Reading (0)" onClick="buyskill(10)" class="skillbtn" /><span class="skills"> +50% Exp per level. Max level: 10.</span><br /></div>
 <br />
 </div>
 
 <div id="statspanel" class="panel">
 <p>
-<label>Crit chance</label><span id="critchance">0</span><br />
-<label>Crit dam</label><span id="critdam">0</span><br />
-
+<div class="youdetail"><label>Crit chance</label><span id="critchance">0</span></div>
+<div class="youdetail"><label>Crit dam</label><span id="critdam">0</span></div>
+<div class="youdetail"><label>Exp bonus</label><span id="expbonus">0</span></div>
+<div class="youdetail"><label>Gold bonus</label><span id="goldbonus">0</span></div>
+<div class="youdetail"><label>Drop chance</label><span id="dropchance">0</span></div>
+<div class="youdetail"><label>Rare enemy chance</label><span id="rareenemychance">0</span></div>
+<div class="youdetail"><label>Epic enemy chance</label><span id="epicenemychance">0</span></div>
+<div class="youdetail"><label>Spell Effect</label><span id="spellbonus">0</span></div>
+</p>
+<p>
+<div class="youdetail"><label>Total kills</label><span id="kills">0</span></div>
+<div class="youdetail"><label>Total gems used</label><span id="gemsused">0</span></div>
 </p>
 </div>
 
 
+<div id="container3" title="Fill rage by killing enemies. It increases your damage.">
+  <div id="ragebar" style="background-color:#ffd700; height:50%; width:100%;bottom:0;position:absolute"><div style="transform: rotate(270deg);bottom:30;left:-33;position:absolute;letter-spacing: 10px">RAGE</div></div>
+  
+</div>
+
 </div>
 
 
-<div id="logbook"class="section">
-</div>
 
+<div id="logbook" class="section">
+</div>
 
 
 </div>
@@ -145,9 +190,21 @@
 <button onclick="deletesave()">Deletesave</button>
 <button onclick="manualsave()">Save</button>
 <button onclick="loadGame()">Load</button>
+<button onclick="window.open('log.html', '_blank');">Updates Log</button>
 
-		
+<script src="jquery/external/jquery/jquery.js"></script>	
+<script src="jquery/jquery-ui.js"></script>	
 <script type="text/javascript" src="main.js"></script>
+  <script>
+/*  $(function() {
+    $( document ).tooltip();
+  }); */
+  
 
-
+ </script>
+ 
 </body>
+<footer>
+<div style="color:#fff">Icon made by <a href="http://www.freepik.com">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+
+</footer>
